@@ -25,11 +25,11 @@ export function TaskList({
   isDeleting,
 }: TaskListProps) {
   if (tasks.length === 0) {
-    return <p>No tasks found.</p>;
+    return <></>;
   }
 
   return (
-    <ul>
+    <ul className="task-list">
       {tasks.map((task) => (
         <TaskItem
           key={task.id}

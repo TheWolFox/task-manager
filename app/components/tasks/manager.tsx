@@ -1,9 +1,9 @@
-
 "use client";
 
 import { useTasks } from "@/client/hooks/useTasks";
 import { TaskForm } from "./form";
 import { TaskList } from "./list";
+import { Header } from "../layout/header";
 
 export function TaskManager() {
   const {
@@ -21,50 +21,48 @@ export function TaskManager() {
     deleteError,
   } = useTasks();
 
-  if (isLoading) {
-    return <p>Loading tasks...</p>;
-  }
-
-  if (error) {
-    return <p>Failed to load tasks: {error.message}</p>;
-  }
-
   return (
-    <main>
-      <h1>Task Manager</h1>
+    <main className="app-shell">
+      <Header />
+      <section className="clipboard">
+        <div className="clipboard-clip" />
 
-      <TaskForm
-        onSubmit={createTask}
-        isSubmitting={isCreating}
-      />
+        <div className="clipboard-paper">
+          {isLoading ? (
+            <p>Loading tasks...</p>
+          ) : error ? (
+            <p role="alert">Failed to load tasks: {error.message}</p>
+          ) : (
+            <>
+              <TaskForm onSubmit={createTask} isSubmitting={isCreating} />
 
-      {createError && (
-        <p role="alert">
-          Failed to create task: {createError.message}
-        </p>
-      )}
+              {createError && (
+                <p role="alert">Failed to create task: {createError.message}</p>
+              )}
 
-      <p>Total tasks: {tasks.length}</p>
+              <hr className="tasks-divider" />
 
-      <TaskList
-        tasks={tasks}
-        onUpdate={updateTask}
-        onDelete={deleteTask}
-        isUpdating={isUpdating}
-        isDeleting={isDeleting}
-      />
+              <p className="total-tasks"> Total Tasks: {tasks.length}</p>
 
-      {updateError && (
-        <p role="alert">
-          Failed to update task: {updateError.message}
-        </p>
-      )}
+              <TaskList
+                tasks={tasks}
+                onUpdate={updateTask}
+                onDelete={deleteTask}
+                isUpdating={isUpdating}
+                isDeleting={isDeleting}
+              />
 
-      {deleteError && (
-        <p role="alert">
-          Failed to delete task: {deleteError.message}
-        </p>
-      )}
+              {updateError && (
+                <p role="alert">Failed to update task: {updateError.message}</p>
+              )}
+
+              {deleteError && (
+                <p role="alert">Failed to delete task: {deleteError.message}</p>
+              )}
+            </>
+          )}
+        </div>
+      </section>
     </main>
   );
 }

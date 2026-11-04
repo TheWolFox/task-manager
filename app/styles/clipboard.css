@@ -1,0 +1,127 @@
+.clipboard {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  padding: 14px;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 22px,
+      rgba(83, 48, 23, 0.13) 23px,
+      transparent 27px
+    ),
+    linear-gradient(
+      135deg,
+      #c28e50,
+      var(--wood-medium) 48%,
+      #956131
+    );
+
+  border: 5px solid var(--wood-dark);
+
+  box-shadow:
+    inset 4px 4px 0 #d5a264,
+    inset -5px -5px 0 #80532e,
+    0 5px 0 #493019,
+    0 10px 0 #242a23,
+    0 18px 30px rgba(0, 0, 0, 0.4);
+}
+
+.clipboard-paper {
+  min-height: 520px;
+  padding: 62px 32px 36px;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      #f8edcf 0%,
+      var(--paper) 75%,
+      #eadbb7 100%
+    );
+
+  border: 3px solid var(--paper-dark);
+
+  box-shadow:
+    2px 3px 0 #c9b991,
+    4px 7px 0 rgba(64, 55, 43, 0.2),
+    0 12px 18px rgba(40, 29, 16, 0.18),
+    inset 3px 3px 0 #fff7df,
+    inset -3px -3px 0 #d9c99f;
+}
+
+/* Clipboard clip */
+
+.clipboard-clip {
+  position: absolute;
+  z-index: 2;
+  top: -19px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 142px;
+  height: 42px;
+
+  background: linear-gradient(
+    to bottom,
+    #d2d1ca 0%,
+    #aaa9a2 45%,
+    #77766f 100%
+  );
+
+  border: 3px solid var(--metal-dark);
+
+  box-shadow:
+    inset 3px 2px 0 #eeede6,
+    inset -3px -3px 0 #696862,
+    3px 5px 0 rgba(0, 0, 0, 0.35);
+}
+
+.clipboard-clip::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 42px;
+  height: 22px;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: linear-gradient(
+    to bottom,
+    #e3e2db 0%,
+    #aaa9a2 100%
+  );
+
+  border: 3px solid var(--metal-dark);
+  border-bottom: 0;
+
+  box-shadow:
+    inset 3px 2px 0 #f4f3ec,
+    2px 0 0 rgba(0, 0, 0, 0.15);
+}
+
+.clipboard-clip::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  width: 20px;
+  height: 7px;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: #77766f;
+  border: 2px solid var(--metal-dark);
+}
+
+@media (max-width: 600px) {
+  .clipboard {
+    padding: 9px;
+  }
+
+  .clipboard-paper {
+    min-height: 460px;
+    padding: 54px 16px 24px;
+  }
+}

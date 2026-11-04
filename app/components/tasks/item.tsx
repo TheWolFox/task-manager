@@ -1,8 +1,10 @@
-
 "use client";
 
-import { useState, SubmitEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import type { Task } from "@/server/models/task";
+import { Button } from "../shared/button";
+import { TextInput } from "../shared/textInput";
+import { TextArea } from "../shared/textArea";
 
 type TaskItemProps = {
   task: Task;
@@ -25,9 +27,7 @@ export function TaskItem({
 }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(task.title);
-  const [description, setDescription] = useState(
-    task.description ?? "",
-  );
+  const [description, setDescription] = useState(task.description ?? "");
 
   function handleUpdate(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,73 +47,84 @@ export function TaskItem({
     setIsEditing(false);
   }
 
+  function handleCancel() {
+    setTitle(task.title);
+    setDescription(task.description ?? "");
+    setIsEditing(false);
+  }
+
   if (isEditing) {
     return (
-      <li>
-        <form onSubmit={handleUpdate}>
+      <li className="task-card task-card-editing">
+        <form className="task-edit-form" onSubmit={handleUpdate}>
+          <h3 className="task-edit-heading">EDIT TASK</h3>
+
           <div>
-            <label htmlFor={`title-${task.id}`}>Title</label>
-            <input
-              id={`title-${task.id}`}
+            <label>Title</label>
+            <TextInput 
               value={title}
-              onChange={(event) => setTitle(event.target.value)}
+              onChange={setTitle}
               required
             />
           </div>
 
           <div>
-            <label htmlFor={`description-${task.id}`}>
-              Description
-            </label>
-            <textarea
-              id={`description-${task.id}`}
+            <label >Description</label>
+            <TextArea 
               value={description}
-              onChange={(event) => setDescription(event.target.value)}
+              onChange={setDescription}
+              placeholderText="Add a description (optional)..."
+              rows={2}
             />
           </div>
 
-          <button type="submit" disabled={isUpdating}>
-            {isUpdating ? "Saving..." : "Save changes"}
-          </button>
+          <div className="task-edit-actions">
+            <Button 
+              title="Cancel"
+              type="button"
+              onClick={handleCancel}
+              disabled={isUpdating}
+              variant="secondary"
+            />
 
-          <button
-            type="button"
-            onClick={() => {
-              setTitle(task.title);
-              setDescription(task.description ?? "");
-              setIsEditing(false);
-            }}
-            disabled={isUpdating}
-          >
-            Cancel
-          </button>
+            <Button 
+              title={isUpdating ? "Saving..." : "Save changes"}
+              type="submit"
+              disabled={isUpdating || !title.trim()}
+            />
+          </div>
         </form>
       </li>
     );
   }
 
   return (
-    <li>
-      <h2>{task.title}</h2>
+    <li className="task-card">
+      <span className="task-checkbox" aria-hidden="true" />
 
-      {task.description && <p>{task.description}</p>}
+      <div className="task-content">
+        <h2 className="task-title">{task.title}</h2>
 
-      <p>Created at: {task.createdAt.toLocaleString()}</p>
+        {task.description && (
+          <p className="task-description">{task.description}</p>
+        )}
+      </div>
 
-      <button
-        type="button"
-        onClick={() => setIsEditing(true)}
-      >
-        Edit
-      </button>
+      <div className="task-actions">
+        <Button 
+          variant="icon"
+          imgSrc="/icons/edit.png"
+          disabled={isDeleting}
+          onClick={() => setIsEditing(true)}
+        />
 
-      <button
-        type="button"
-        onClick={() => onDelete({ id: task.id })}
-        disabled={isDeleting}
-      >
-        {isDeleting ? "Deleting..." : "Delete"}
-      </button>
+        <Button 
+          variant="icon"
+          imgSrc="/icons/trash.png"
+          disabled={isDeleting}
+          onClick={() => onDelete({ id: task.id })}
+        />
+      </div>
     </li>
   );
 }

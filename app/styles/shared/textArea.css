@@ -1,0 +1,19 @@
+.text-area {
+  width: 100%;
+  padding: 12px 14px;
+
+  color: var(--ink);
+  font-size: 16px;
+
+  background: #f7edcf;
+  border: 3px solid var(--card-border);
+
+  box-shadow:
+    inset 2px 2px 0 #e2d3b0,
+    2px 3px 0 #c5b48d;
+}
+
+.text-area:focus {
+  outline: 2px solid var(--wood-medium);
+  outline-offset: 2px;
+}

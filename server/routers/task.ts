@@ -1,12 +1,18 @@
-import { z } from "zod";
+import {
+  createTaskInputSchema,
+  updateTaskInputSchema,
+  taskIdSchema,
+} from "../models/task";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
+import { TRPCError } from "@trpc/server";
+
 import {
   createTask,
+  deleteTask,
   getAllTasks,
   updateTask,
-  deleteTask,
 } from "../repositories/task";
 
 export const taskRouter = createTRPCRouter({
@@ -14,38 +20,35 @@ export const taskRouter = createTRPCRouter({
     return getAllTasks();
   }),
 
-  create: publicProcedure
-    .input(
-      z.object({
-        title: z.string().trim().min(1),
-        description: z.string().optional(),
-      }),
-    )
-    .mutation(({ input }) => {
-      return createTask(input);
-    }),
+  create: publicProcedure.input(createTaskInputSchema).mutation(({ input }) => {
+    return createTask(input);
+  }),
 
-  update: publicProcedure
-    .input(
-      z.object({
-        id: z.uuid(),
-        title: z.string().trim().min(1).optional(),
-        description: z.string().optional(),
-      }),
-    )
-    .mutation(({ input }) => {
-      const { id, ...updates } = input;
+  update: publicProcedure.input(updateTaskInputSchema).mutation(({ input }) => {
+    const { id, ...updates } = input;
 
-      return updateTask(id, updates);
-    }),
+    const updatedTask = updateTask(id, updates);
 
-  delete: publicProcedure
-    .input(
-      z.object({
-        id: z.uuid(),
-      }),
-    )
-    .mutation(({ input }) => {
-      return deleteTask(input.id);
-    }),
+    if (!updatedTask) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Task not found.",
+      });
+    }
+
+    return updatedTask;
+  }),
+
+  delete: publicProcedure.input(taskIdSchema).mutation(({ input }) => {
+    const deleted = deleteTask(input.id);
+
+    if (!deleted) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Task not found.",
+      });
+    }
+
+    return deleted;
+  }),
 });

@@ -7,7 +7,7 @@ import {
   getAllTasks,
   updateTask,
   deleteTask,
-} from "../repositories/taskRepository";
+} from "../repositories/task";
 
 export const taskRouter = createTRPCRouter({
   getAll: publicProcedure.query(() => {

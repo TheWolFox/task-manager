@@ -8,7 +8,7 @@ import { Header } from "../layout/header";
 export function TaskManager() {
   const {
     tasks,
-    isLoading,
+    isInitialLoading,
     error,
     createTask,
     updateTask,
@@ -28,7 +28,7 @@ export function TaskManager() {
         <div className="clipboard-clip" />
 
         <div className="clipboard-paper">
-          {isLoading ? (
+          {isInitialLoading ? (
             <p>Loading tasks...</p>
           ) : error ? (
             <p role="alert">Failed to load tasks: {error.message}</p>

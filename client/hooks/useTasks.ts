@@ -41,7 +41,9 @@ export function useTasks() {
 
   return {
     tasks: tasksQuery.data ?? [],
-    isLoading: tasksQuery.isPending,
+    isInitialLoading:
+      tasksQuery.isPending ||
+      (tasksQuery.isFetching && !tasksQuery.isFetchedAfterMount),
     error: tasksQuery.error,
 
     createTask: createTaskMutation.mutate,

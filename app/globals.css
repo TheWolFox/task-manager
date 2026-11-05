@@ -11,6 +11,7 @@
 @import "./styles/shared/textInput.css";
 @import "./styles/shared/textArea.css";
 @import "./styles/shared/button.css";
+@import "./styles/shared/notification.css";
 
 * {
   font-family: "Press Start 2P", cursive;

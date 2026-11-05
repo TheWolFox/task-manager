@@ -38,13 +38,17 @@ export function TaskItem({
       return;
     }
 
-    onUpdate({
-      id: task.id,
-      title: trimmedTitle,
-      description: description.trim() || undefined,
-    });
+    try {
+      onUpdate({
+        id: task.id,
+        title: trimmedTitle,
+        description: description.trim() || undefined,
+      });
 
-    setIsEditing(false);
+      setIsEditing(false);
+    } catch {
+      // Keep the edit form open so the user can try again.
+    }
   }
 
   function handleCancel() {

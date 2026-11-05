@@ -23,13 +23,17 @@ export function TaskForm({ onSubmit, isSubmitting }: TaskFormProps) {
       return;
     }
 
-    onSubmit({
-      title: trimmedTitle,
-      description: description.trim() || undefined,
-    });
+    try {
+      onSubmit({
+        title: trimmedTitle,
+        description: description.trim() || undefined,
+      });
 
-    setTitle("");
-    setDescription("");
+      setTitle("");
+      setDescription("");
+    } catch {
+      // Keep the entered values so the user can try again.
+    }
   }
 
   return (

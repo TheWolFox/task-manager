@@ -1,24 +1,40 @@
 "use client";
 
 import {
+  useInfiniteQuery,
   useMutation,
-  useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
 
 import { useTRPC } from "@/client/provider";
 
+const TASKS_PAGE_SIZE = 10;
+
 export function useTasks() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
 
-  const tasksQuery = useQuery(
-    trpc.task.getAll.queryOptions(),
+  const tasksQuery = useInfiniteQuery(
+    trpc.task.getPaginated.infiniteQueryOptions(
+      { limit: TASKS_PAGE_SIZE },
+      {
+        getNextPageParam: (lastPage) =>
+          lastPage.nextCursor ?? undefined,
+      },
+    ),
   );
+
+  const tasks =
+    tasksQuery.data?.pages.flatMap((page) => page.items) ?? [];
+
+  const totalCount =
+    tasksQuery.data?.pages[0]?.totalCount ?? 0;
 
   const invalidateTasks = () =>
     queryClient.invalidateQueries(
-      trpc.task.getAll.queryFilter(),
+      trpc.task.getPaginated.infiniteQueryFilter({
+        limit: TASKS_PAGE_SIZE,
+      }),
     );
 
   const createTaskMutation = useMutation(
@@ -40,11 +56,17 @@ export function useTasks() {
   );
 
   return {
-    tasks: tasksQuery.data ?? [],
+    tasks,
+    totalCount,
+
     isInitialLoading:
       tasksQuery.isPending ||
       (tasksQuery.isFetching && !tasksQuery.isFetchedAfterMount),
     error: tasksQuery.error,
+
+    fetchNextPage: tasksQuery.fetchNextPage,
+    hasNextPage: tasksQuery.hasNextPage,
+    isFetchingNextPage: tasksQuery.isFetchingNextPage,
 
     createTask: createTaskMutation.mutate,
     updateTask: updateTaskMutation.mutate,
@@ -53,9 +75,5 @@ export function useTasks() {
     isCreating: createTaskMutation.isPending,
     isUpdating: updateTaskMutation.isPending,
     isDeleting: deleteTaskMutation.isPending,
-
-    createError: createTaskMutation.error,
-    updateError: updateTaskMutation.error,
-    deleteError: deleteTaskMutation.error,
   };
 }

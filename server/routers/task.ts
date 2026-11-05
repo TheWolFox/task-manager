@@ -2,6 +2,7 @@ import {
   createTaskInputSchema,
   updateTaskInputSchema,
   taskIdSchema,
+  paginatedTasksInputSchema,
 } from "../models/task";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
@@ -50,5 +51,28 @@ export const taskRouter = createTRPCRouter({
     }
 
     return deleted;
+  }),
+
+  getPaginated: publicProcedure
+  .input(paginatedTasksInputSchema)
+  .query(({ input }) => {
+    const allTasks = getAllTasks();
+    const startIndex = input.cursor ?? 0;
+
+    const items = allTasks.slice(
+      startIndex,
+      startIndex + input.limit,
+    );
+
+    const nextCursor =
+      startIndex + items.length < allTasks.length
+        ? startIndex + items.length
+        : null;
+
+    return {
+      items,
+      nextCursor,
+      totalCount: allTasks.length,
+    };
   }),
 });

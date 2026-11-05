@@ -140,3 +140,11 @@
   justify-content: flex-end;
   gap: 10px;
 }
+
+.tasks-load-more {
+  min-height: 40px;
+  padding: 12px 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+}

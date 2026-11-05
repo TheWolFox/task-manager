@@ -31,6 +31,12 @@ export const taskIdSchema = z.object({
   id: z.uuid(),
 });
 
+export const paginatedTasksInputSchema = z.object({
+  limit: z.number().int().min(1).max(50),
+  cursor: z.number().int().min(0).nullish(),
+});
+
 export type Task = z.infer<typeof taskSchema>;
 export type CreateTaskInput = z.infer<typeof createTaskInputSchema>;
 export type UpdateTaskInput = z.infer<typeof updateTaskInputSchema>;
+export type PaginatedTasksInput = z.infer<typeof paginatedTasksInputSchema>;

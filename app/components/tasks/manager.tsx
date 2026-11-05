@@ -16,6 +16,7 @@ type NotificationState = {
 export function TaskManager() {
   const {
     tasks,
+    totalCount,
     isInitialLoading,
     error,
     createTask,
@@ -24,6 +25,9 @@ export function TaskManager() {
     isCreating,
     isUpdating,
     isDeleting,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   } = useTasks();
   const [notifications, setNotifications] = useState<NotificationState[]>([]);
   const nextNotificationId = useRef(0);
@@ -34,30 +38,48 @@ export function TaskManager() {
   }
 
   function closeNotification(id: number) {
-    setNotifications((current) => current.filter((notification) => notification.id !== id));
+    setNotifications((current) =>
+      current.filter((notification) => notification.id !== id),
+    );
   }
 
   function handleCreateTask(input: { title: string; description?: string }) {
     try {
       createTask(input);
-      addNotification({ type: "success", message: "Task created successfully." });
+      addNotification({
+        type: "success",
+        message: "Task created successfully.",
+      });
     } catch (mutationError) {
       addNotification({
         type: "error",
-        message: mutationError instanceof Error ? mutationError.message : "Failed to create task.",
+        message:
+          mutationError instanceof Error
+            ? mutationError.message
+            : "Failed to create task.",
       });
       throw mutationError;
     }
   }
 
-  function handleUpdateTask(input: { id: string; title?: string; description?: string }) {
+  function handleUpdateTask(input: {
+    id: string;
+    title?: string;
+    description?: string;
+  }) {
     try {
       updateTask(input);
-      addNotification({ type: "success", message: "Task updated successfully." });
+      addNotification({
+        type: "success",
+        message: "Task updated successfully.",
+      });
     } catch (mutationError) {
       addNotification({
         type: "error",
-        message: mutationError instanceof Error ? mutationError.message : "Failed to update task.",
+        message:
+          mutationError instanceof Error
+            ? mutationError.message
+            : "Failed to update task.",
       });
       throw mutationError;
     }
@@ -66,11 +88,17 @@ export function TaskManager() {
   function handleDeleteTask(input: { id: string }) {
     try {
       deleteTask(input);
-      addNotification({ type: "success", message: "Task deleted successfully." });
+      addNotification({
+        type: "success",
+        message: "Task deleted successfully.",
+      });
     } catch (mutationError) {
       addNotification({
         type: "error",
-        message: mutationError instanceof Error ? mutationError.message : "Failed to delete task.",
+        message:
+          mutationError instanceof Error
+            ? mutationError.message
+            : "Failed to delete task.",
       });
     }
   }
@@ -101,7 +129,7 @@ export function TaskManager() {
             <>
               <TaskForm onSubmit={handleCreateTask} isSubmitting={isCreating} />
               <hr className="tasks-divider" />
-              <p className="total-tasks"> Total Tasks: {tasks.length}</p>
+              <p className="total-tasks">Total Tasks: {totalCount}</p>
 
               <TaskList
                 tasks={tasks}
@@ -109,6 +137,9 @@ export function TaskManager() {
                 onDelete={handleDeleteTask}
                 isUpdating={isUpdating}
                 isDeleting={isDeleting}
+                hasNextPage={hasNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+                onLoadMore={() => fetchNextPage()}
               />
             </>
           )}

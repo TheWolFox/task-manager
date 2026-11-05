@@ -6,7 +6,7 @@
 
   flex-shrink: 0;
 
-  transition: transform 0.15s, background 0.15s;
+  transition: transform 0.15s;
 }
 
 .button-primary {
@@ -49,8 +49,6 @@
     inset 2px 2px 0 #fff8e2,
     inset -2px -2px 0 #dfd0aa,
     2px 3px 0 #c5b48d;
-
-  cursor: pointer;
 }
 
 .button-icon img {
@@ -72,10 +70,4 @@
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-@media (max-width: 600px) {
-  .button {
-    width: 100%;
-  }
 }

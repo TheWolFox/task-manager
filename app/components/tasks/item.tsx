@@ -26,6 +26,7 @@ export function TaskItem({
   isDeleting,
 }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description ?? "");
 
@@ -65,16 +66,12 @@ export function TaskItem({
 
           <div>
             <label>Title</label>
-            <TextInput 
-              value={title}
-              onChange={setTitle}
-              required
-            />
+            <TextInput value={title} onChange={setTitle} required />
           </div>
 
           <div>
-            <label >Description</label>
-            <TextArea 
+            <label>Description</label>
+            <TextArea
               value={description}
               onChange={setDescription}
               placeholderText="Add a description (optional)..."
@@ -83,7 +80,7 @@ export function TaskItem({
           </div>
 
           <div className="task-edit-actions">
-            <Button 
+            <Button
               title="Cancel"
               type="button"
               onClick={handleCancel}
@@ -91,7 +88,7 @@ export function TaskItem({
               variant="secondary"
             />
 
-            <Button 
+            <Button
               title={isUpdating ? "Saving..." : "Save changes"}
               type="submit"
               disabled={isUpdating || !title.trim()}
@@ -103,30 +100,64 @@ export function TaskItem({
   }
 
   return (
-    <li className="task-card">
-      <span className="task-checkbox" aria-hidden="true" />
+    <li
+      className="task-card"
+      role="button"
+      tabIndex={0}
+      aria-expanded={isExpanded}
+      onClick={() => setIsExpanded((current) => !current)}
+      onKeyDown={(event) => {
+        if (event.target !== event.currentTarget) return;
 
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          setIsExpanded((current) => !current);
+        }
+      }}
+    >
       <div className="task-content">
         <h2 className="task-title">{task.title}</h2>
 
         {task.description && (
           <p className="task-description">{task.description}</p>
         )}
+
+        {isExpanded && (
+          <div className="task-metadata">
+            <p>
+              <strong>ID:</strong> {task.id}
+            </p>
+
+            <p>
+              <strong>Created date:</strong>{" "}
+              {new Date(task.createdAt).toLocaleString("en-US", {
+                dateStyle: "medium",
+                timeStyle: "short",
+              })}
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="task-actions">
-        <Button 
+        <Button
           variant="icon"
           imgSrc="/icons/edit.png"
           disabled={isDeleting}
-          onClick={() => setIsEditing(true)}
+          onClick={(event) => {
+            event.stopPropagation();
+            setIsEditing(true);
+          }}
         />
 
-        <Button 
+        <Button
           variant="icon"
           imgSrc="/icons/trash.png"
           disabled={isDeleting}
-          onClick={() => onDelete({ id: task.id })}
+          onClick={(event) => {
+            event.stopPropagation();
+            onDelete({ id: task.id });
+          }}
         />
       </div>
     </li>

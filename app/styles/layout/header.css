@@ -164,7 +164,7 @@
 .brand-title {
   margin: 0;
   color: var(--paper);
-  font-size: clamp(20px, 3.5vw, 30px);
+  font-size: 30px;
   line-height: 1.7;
   text-align: center;
   white-space: nowrap;
@@ -180,28 +180,4 @@
   line-height: 1.8;
   text-align: center;
   text-shadow: 2px 2px 0 #3e2414;
-}
-
-@media (max-width: 600px) {
-  .brand-plaque {
-    padding: 38px 20px 25px;
-    gap: 12px;
-  }
-
-  .brand-heading {
-    gap: 10px;
-  }
-
-  .brand-icon {
-    width: 25px;
-    height: 25px;
-  }
-
-  .brand-title {
-    font-size: clamp(12px, 3.5vw, 17px);
-  }
-
-  .brand-subtitle {
-    font-size: 7px;
-  }
 }

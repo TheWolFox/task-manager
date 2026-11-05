@@ -22,9 +22,3 @@ body {
   align-items: center;
   padding: 56px 20px 80px;
 }
-
-@media (max-width: 600px) {
-  .app-shell {
-    padding: 48px 12px 60px;
-  }
-}

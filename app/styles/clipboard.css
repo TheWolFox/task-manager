@@ -114,14 +114,3 @@
   background: #77766f;
   border: 2px solid var(--metal-dark);
 }
-
-@media (max-width: 600px) {
-  .clipboard {
-    padding: 9px;
-  }
-
-  .clipboard-paper {
-    min-height: 460px;
-    padding: 54px 16px 24px;
-  }
-}

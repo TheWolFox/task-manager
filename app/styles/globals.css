@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+@import "tailwindcss";
+
+@import "./layout/variables.css";
+@import "./layout/layout.css";
+@import "./layout/header.css";
+@import "./tasks/clipboard.css";
+@import "./tasks/tasks.css";
+@import "./tasks/form.css";
+@import "./shared/textInput.css";
+@import "./shared/textArea.css";
+@import "./shared/button.css";
+@import "./shared/notification.css";
+
+* {
+  font-family: "Press Start 2P", cursive;
+  word-spacing: -0.3em;
+}

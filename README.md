@@ -89,12 +89,13 @@ Mutations invalidate the paginated task query to keep the displayed list synchro
 
 ```text
 app/
-  api/                 # tRPC API route
+  api/                  # tRPC API route
   components/
-    layout/            # Layout components
-    shared/            # Reusable UI components
-    tasks/             # Task-related components
-  styles/              # Global and component styles
+    layout/             # Layout components
+    shared/             # Reusable UI components
+    tasks/              # Task-related components
+  styles/               # Global and component styles
+  layout.tsx            # Root layout, defines the HTML structure and imports global styles
   page.tsx              # Main page
 
 client/
